@@ -379,7 +379,11 @@ function [handles,levels,parentIdx,listing] = findjobj(container,varargin)
         end
         try
             % If invalid RootPane - try another method...
-            warning('off','MATLAB:HandleGraphics:ObsoletedProperty:JavaFrame');  % R2008b compatibility
+%             warning('off','MATLAB:HandleGraphics:ObsoletedProperty:JavaFrame');  % R2008b compatibility
+            id = 'MATLAB:ui:javaframe:PropertyToBeRemoved';
+            oldState = warning('query', id);
+            restoreWarning = onCleanup(@() warning(oldState));
+            warning('off', id)
             jFrame = get(hFig,'JavaFrame');
             jAxisComponent = get(jFrame,'AxisComponent');
             jRootPane = jAxisComponent.getParent.getParent.getRootPane;

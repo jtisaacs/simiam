@@ -197,6 +197,10 @@ classdef AppWindow < handle
             obj.ui_update_clock(0);
 
             % Set minimum size for figure
+            id = 'MATLAB:ui:javaframe:PropertyToBeRemoved';
+            oldState = warning('query', id);
+            restoreWarning = onCleanup(@() warning(oldState));
+            warning('off', id)
             jFrame = get(handle(obj.parent_), 'JavaFrame');
             jClient = jFrame.fHG2Client;
             drawnow;
