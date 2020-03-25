@@ -209,7 +209,7 @@ classdef AppWindow < handle
 
             % Set minimum size for figure
             jFrame = get(handle(obj.parent_), 'JavaFrame');
-            jClient = jFrame.fHG1Client;
+            jClient = jFrame.fHG2Client;
             drawnow;
             jWindow = jClient.getWindow;
             jWindow.setMinimumSize(java.awt.Dimension(800, 600));
@@ -485,7 +485,7 @@ classdef AppWindow < handle
         
         function ui_zoom_view(obj, src, event, varargin)
             zoom_level_factor = 0.25;
-            obj.zoom_level_ = obj.zoom_level_+zoom_level_factor*event.VerticalScrollCount;
+            obj.zoom_level_ = obj.zoom_level_+zoom_level_factor*varargin{1};
             obj.zoom_level_ = min(max(obj.zoom_level_,0.1), obj.boundary_);
             
             if (~obj.is_tracking_)
@@ -506,13 +506,11 @@ classdef AppWindow < handle
         end
         
         function ui_button_zoom_in(obj, src, event)
-            event.VerticalScrollCount = -1;
-            obj.ui_zoom_view(src, event);
+            obj.ui_zoom_view(src, event, -1); %decrement zoom level
         end
         
         function ui_button_zoom_out(obj, src, event)
-            event.VerticalScrollCount = 1;
-            obj.ui_zoom_view(src, event);
+            obj.ui_zoom_view(src, event, 1); %increment zoom level
         end
         
         function ui_press_mouse(obj, src, event, handles)

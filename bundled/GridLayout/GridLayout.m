@@ -279,7 +279,11 @@ classdef GridLayout < handle
             end
             % Layout size
             NewPosition = getpixelposition(Obj.Container);
-            OldPosition = getappdata(Obj.Container,'Position');
+            if(~isempty(Obj.Container))
+                OldPosition = getappdata(Obj.Container,'Position');
+            else
+                OldPosition = NewPosition;
+            end
             if isequal(NewPosition,OldPosition) && IsCallback
                 return;
             end
