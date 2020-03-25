@@ -121,19 +121,8 @@ classdef AppWindow < handle
             
             % Create UI buttons
             icon_file = fullfile(obj.root_, 'resources/splash/simiam_splash.png');
-            if(isunix)
-                icon_url = ['file://' icon_file];
-            else
-                icon_url = strrep(['file:/' icon_file],'\','/');
-            end
-            button_string = ['<html><div style="text-align: center"><img src="' icon_url '"/>' ...
-                   '<br>Welcome to <b>Sim.I.am</b>, a robot simulator.' ...
-                   '<br>This is <em>Sim the Fourth</em>, your companion for control theory and robotics.' ...
-                   '<br>The simulator is maintained by the GRITSLab at' ...
-                   '<br><a href="http://gritslab.gatech.edu/projects/robot-simulator">http://gritslab.gatech.edu/projects/robot-simulator</a>' ...
-                   '</div><br><ol><li>Start by clicking the play button.</li><li>Double-click to send the red robot to a new location.</li><li>Use the mouse to pan and zoom.</li><li>Select the robot to follow it</li><li>If any robot crashes, press the rewind button.</li></ol>' ...
-                   '</html>'];
-            ui_args = {'Style','pushbutton', 'String', button_string, 'ForegroundColor', 'w', 'FontWeight', 'bold', 'BackgroundColor', obj.ui_colors_.gray, 'Callback', @obj.ui_button_start};
+            [splash_img,~]=imread(icon_file);
+            ui_args = {'Style','pushbutton', 'ForegroundColor', 'w', 'FontWeight', 'bold', 'BackgroundColor', obj.ui_colors_.gray, 'CData', splash_img, 'Callback', @obj.ui_button_start};
             ui_parent = obj.layout_.Cell(2,1);
             obj.logo_ = uicontrol(ui_parent, ui_args{:});
             set(obj.logo_, 'Enable', 'inactive');
@@ -251,13 +240,8 @@ classdef AppWindow < handle
         
         function ui_set_button_icon(obj, ui_button, icon)
             icon_file = fullfile(obj.root_, 'resources/icons', icon);
-            if(isunix)
-                icon_url = ['file://' icon_file];
-            else
-                icon_url = strrep(['file:/' icon_file],'\','/');
-            end
-            button_string = ['<html><img src="' icon_url '"/></html>'];
-            set(ui_button, 'String', button_string);
+            [button_img,~]=imread(icon_file);
+            set(ui_button, 'cdata', button_img);
         end
         
         function ui_update_clock(obj, dt)
@@ -355,7 +339,8 @@ classdef AppWindow < handle
             else
                 obj.ui_toggle_control(obj.ui_buttons_.play, false);
             end
-
+            
+            obj.ui_toggle_control(obj.ui_buttons_.refresh, true);
             obj.ui_toggle_control(obj.ui_buttons_.zoom_in, true);
             obj.ui_toggle_control(obj.ui_buttons_.zoom_out, true);
             obj.time_ = 0;
@@ -385,19 +370,8 @@ classdef AppWindow < handle
             set(view_parent, 'Children', []);
             Update(obj.layout_);
             icon_file = fullfile(obj.root_, 'resources/splash/simiam_splash.png');
-            if(isunix)
-                icon_url = ['file://' icon_file];
-            else
-                icon_url = strrep(['file:/' icon_file],'\','/');
-            end
-            button_string = ['<html><div style="text-align: center"><img src="' icon_url '"/>' ...
-                             '<br>Welcome to <b>Sim.I.am</b>, a robot simulator.' ...
-                             '<br>This is <em>Sim the Second</em>, your companion for control theory and robotics.' ...
-                             '<br>The simulator is maintained by the GRITSLab at' ...
-                             '<br><a href="http://gritslab.gatech.edu/projects/robot-simulator">http://gritslab.gatech.edu/projects/robot-simulator</a>' ...
-                             '</div><br><ol><li>Start by clicking the play button.</li><li>Double-click to send the red robot to a new location.</li><li>Use the mouse to pan and zoom.</li><li>Select the robot to follow it</li><li>If any robot crashes, press the rewind button.</li></ol>' ...
-                             '</html>'];
-            ui_args = {'Style','pushbutton', 'String', button_string, 'ForegroundColor', 'w', 'FontWeight', 'bold', 'BackgroundColor', obj.ui_colors_.gray, 'Callback', @obj.ui_button_start};
+            [splash_img,~]=imread(icon_file);
+            ui_args = {'Style','pushbutton', 'ForegroundColor', 'w', 'FontWeight', 'bold', 'BackgroundColor', obj.ui_colors_.gray, 'CData', splash_img, 'Callback', @obj.ui_button_start};
             ui_parent = obj.layout_.Cell(2,1);
             obj.logo_ = uicontrol(ui_parent, ui_args{:});
             set(obj.logo_, 'Enable', 'inactive');
